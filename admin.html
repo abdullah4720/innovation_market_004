@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>لوحة التحكم | Innovation Marketplace — حاضنة ابتكار 5</title>
+<meta name="theme-color" content="#0B1F3A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap');
+
+:root{
+  --navy:#15144E;
+  --navy-2:#1E1D63;
+  --navy-3:#282775;
+  --purple:#9A05B9;
+  --purple-dark:#4C0C7A;
+  --gold:#FCC342;
+  --gold-dark:#C89C45;
+  --teal:#00BF9D;
+  --teal-dark:#0F3B60;
+  --green:#63D653;
+  --green-dark:#2C5050;
+  --white:#FFFFFF;
+  --paper:#FFFFFF;
+  --ink:#15144E;
+  --muted:#6B6F93;
+  --line:rgba(21,20,78,0.12);
+  --danger:#C24B4B;
+  --radius:16px;
+  --shadow: 0 10px 30px -12px rgba(21,20,78,0.28);
+
+  /* دلالة الألوان حسب مراحل حاضنة ابتكار الفعلية:
+     الاستكشاف = أخضر (كبداية الهاكثون) | التقييم = بنفسجي (لون "التحكيم") | النتائج = تركوازي (لون "معرض الابتكار") */
+  --phase-explore:var(--green);
+  --phase-evaluation:var(--purple);
+  --phase-results:var(--teal);
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Tajawal',sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  direction:rtl;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
+}
+::selection{background:var(--gold);}
+
+/* ---------- شريط الوسوم الزخرفي (العنصر المميز من الهوية) ---------- */
+.brand-ticks{
+  display:flex; align-items:flex-end; gap:5px; height:22px; padding:0 18px;
+  overflow:hidden;
+}
+.brand-ticks span{width:2px; border-radius:2px; flex-shrink:0;}
+
+/* ---------- شعار حاضنة ابتكار 5 ---------- */
+.logo-lockup{display:flex; align-items:center; gap:9px;}
+.logo-num-box{
+  width:24px; height:24px; border:2px solid var(--navy); border-radius:6px;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:900; font-size:12.5px; color:var(--navy); flex-shrink:0;
+}
+.logo-num-box.on-dark{border-color:#fff; color:#fff;}
+.logo-text{line-height:1.2;}
+.logo-text b{font-size:14.5px; font-weight:800; display:block; color:var(--navy);}
+.logo-text .en{font-size:8.5px; letter-spacing:1.2px; color:var(--muted); display:block; text-transform:uppercase;}
+.logo-lockup.on-dark .logo-text b{color:#fff;}
+.logo-lockup.on-dark .logo-text .en{color:rgba(255,255,255,0.65);}
+
+/* ---------- Layout shells ---------- */
+.app{max-width:520px; margin:0 auto; min-height:100vh; background:var(--paper); position:relative; display:flex; flex-direction:column;}
+.app.wide{max-width:1100px;}
+
+.topbar{
+  position:sticky; top:0; z-index:40; background:#fff; color:var(--navy);
+  padding:14px 18px 0; box-shadow:0 2px 14px rgba(21,20,78,0.06);
+}
+.topbar .toprow{display:flex; align-items:center; justify-content:space-between; padding-bottom:12px;}
+.topbar .phase-pill{
+  font-size:11px; font-weight:800; padding:6px 12px; border-radius:999px; color:#fff;
+}
+
+.content{flex:1; padding:18px 16px 90px;}
+
+/* ---------- Buttons ---------- */
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; border:none; cursor:pointer; font-family:inherit; padding:13px 20px; border-radius:12px; font-weight:800; font-size:14.5px; transition:transform .12s, box-shadow .12s, opacity .12s;}
+.btn:active{transform:scale(.97);}
+.btn-primary{background:var(--navy); color:#fff;}
+.btn-primary:hover{background:var(--navy-3);}
+.btn-gold{background:var(--gold); color:var(--navy);}
+.btn-teal{background:var(--teal); color:#fff;}
+.btn-purple{background:var(--purple); color:#fff;}
+.btn-outline{background:transparent; border:1.5px solid var(--line); color:var(--ink);}
+.btn-block{width:100%;}
+.btn:disabled{opacity:.45; cursor:not-allowed;}
+.btn-sm{padding:8px 14px; font-size:12.5px; border-radius:9px;}
+
+/* ---------- Cards ---------- */
+.card{background:#fff; border-radius:var(--radius); padding:16px; box-shadow:0 2px 14px rgba(21,20,78,0.07); border:1px solid var(--line);}
+.company-card{display:flex; align-items:center; gap:14px; cursor:pointer; margin-bottom:12px; position:relative; overflow:hidden;}
+.company-card::before{content:''; position:absolute; inset-inline-start:0; top:0; bottom:0; width:4px; background:var(--teal);}
+.company-card .emoji{width:52px;height:52px;border-radius:12px;background:#F4F3FB; display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
+.company-card .info{flex:1; min-width:0;}
+.company-card .info b{font-size:15.5px; display:block;}
+.company-card .info span{font-size:12px; color:var(--muted);}
+.company-card .badges{display:flex; gap:6px; margin-top:6px;}
+.badge{font-size:10px; font-weight:800; padding:3px 8px; border-radius:999px;}
+.badge.visited{background:rgba(0,191,157,0.14); color:var(--teal-dark);}
+.badge.watch{background:rgba(252,195,66,0.22); color:#8a6a1f;}
+.chev{color:var(--muted); font-size:18px;}
+
+/* ---------- Detail page ---------- */
+.hero-block{background:var(--navy); color:#fff; border-radius:var(--radius); padding:22px 18px; margin-bottom:16px; position:relative; overflow:hidden;}
+.hero-block::after{content:''; position:absolute; inset-inline-end:-40px; top:-40px; width:150px;height:150px; border-radius:50%; background:radial-gradient(circle, rgba(0,191,157,.35), transparent 70%); pointer-events:none;}
+.hero-block .sector{font-size:11px; color:var(--gold); font-weight:700; letter-spacing:.5px;}
+.hero-block h1{font-size:22px; margin:6px 0 4px; font-weight:900;}
+.hero-block .booth{font-size:12.5px; color:rgba(255,255,255,.75); display:flex; align-items:center; gap:6px;}
+
+.section-title{font-size:13px; font-weight:800; color:var(--navy); margin:18px 0 8px; display:flex; align-items:center; gap:6px;}
+.section-title::before{content:''; width:4px; height:14px; background:var(--gold); border-radius:2px;}
+.body-text{font-size:14px; line-height:1.9; color:#333;}
+.action-row{display:flex; gap:10px; margin-top:20px;}
+
+/* ---------- Star rating ---------- */
+.rating-block{margin-bottom:20px;}
+.rating-block .rlabel{font-size:14px; font-weight:800; margin-bottom:8px;}
+.stars{display:flex; gap:6px; direction:ltr; justify-content:flex-end;}
+.stars .star{font-size:30px; cursor:pointer; color:#E3E2F0; transition:color .1s, transform .1s; user-select:none;}
+.stars .star.filled{color:var(--purple);}
+.stars .star:active{transform:scale(1.2);}
+
+.invest-options{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;}
+.invest-chip{padding:10px 16px; border-radius:12px; border:1.5px solid var(--line); background:#fff; font-weight:800; font-size:14px; cursor:pointer; min-width:64px; text-align:center;}
+.invest-chip.selected{background:var(--purple); color:#fff; border-color:var(--purple);}
+
+/* ---------- Progress ---------- */
+.progress-wrap{background:#fff; border-radius:14px; padding:16px; border:1px solid var(--line);}
+.progress-bar{height:14px; background:#F1F0F9; border-radius:999px; overflow:hidden; margin-top:10px;}
+.progress-bar > div{height:100%; background:linear-gradient(90deg,var(--teal-dark),var(--teal)); border-radius:999px; transition:width .5s ease;}
+.progress-num{font-size:34px; font-weight:900; color:var(--navy);}
+
+/* ---------- Empty / lock states ---------- */
+.empty-state{text-align:center; padding:50px 20px; color:var(--muted);}
+.empty-state .icon{font-size:40px; margin-bottom:10px;}
+.empty-state h3{color:var(--ink); font-size:16px; margin-bottom:6px;}
+.empty-state p{font-size:13px; line-height:1.7;}
+
+/* ---------- Bottom tabbar ---------- */
+.tabbar{position:fixed; bottom:0; left:0; right:0; z-index:50; max-width:520px; margin:0 auto; background:#fff; border-top:1px solid var(--line); display:flex; padding:8px 6px calc(env(safe-area-inset-bottom) + 8px); box-shadow:0 -6px 20px rgba(21,20,78,0.07);}
+.tabbar .tab{flex:1; text-align:center; padding:8px 4px; border-radius:12px; cursor:pointer; color:var(--muted); font-size:11px; font-weight:700;}
+.tabbar .tab .ticon{font-size:19px; display:block; margin-bottom:2px;}
+.tabbar .tab.active{color:var(--navy); background:#F4F3FB;}
+
+/* ---------- Podium / results ---------- */
+.podium{display:flex; align-items:flex-end; gap:10px; justify-content:center; margin:30px 0;}
+.podium .p{flex:1; max-width:140px; background:#fff; border:1px solid var(--line); border-radius:14px 14px 0 0; text-align:center; padding:14px 8px; position:relative;}
+.podium .p.first{background:linear-gradient(180deg,#fff, #FFF6E0); border-color:var(--gold); order:2; padding-top:26px;}
+.podium .p.second{order:1;}
+.podium .p.third{order:3;}
+.podium .medal{font-size:30px;}
+.podium .pname{font-weight:800; font-size:13px; margin-top:6px;}
+.podium .pval{font-size:11px; color:var(--teal-dark); font-weight:800; margin-top:4px;}
+
+.leaderboard-row{display:flex; align-items:center; gap:12px; padding:12px; background:#fff; border-radius:12px; border:1px solid var(--line); margin-bottom:8px;}
+.leaderboard-row .rank{width:28px;height:28px;border-radius:50%;background:#F4F3FB; display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12.5px;color:var(--navy); flex-shrink:0;}
+.leaderboard-row .rname{flex:1; font-weight:800; font-size:14px;}
+.leaderboard-row .rval{font-weight:900; color:var(--teal-dark); font-size:13px;}
+
+/* ---------- Login ---------- */
+.login-wrap{min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; background:var(--navy); position:relative; overflow:hidden;}
+.login-wrap::before{content:''; position:absolute; inset-inline-start:-80px; top:-80px; width:260px;height:260px; border-radius:50%; background:radial-gradient(circle, rgba(0,191,157,.35), transparent 70%); pointer-events:none;}
+.login-wrap::after{content:''; position:absolute; inset-inline-end:-60px; bottom:-60px; width:220px;height:220px; border-radius:50%; background:radial-gradient(circle, rgba(154,5,185,.30), transparent 70%); pointer-events:none;}
+.login-card{background:#fff; border-radius:20px; padding:28px 24px; width:100%; max-width:380px; position:relative; z-index:2; box-shadow:0 25px 60px rgba(0,0,0,.35);}
+.login-logo{display:flex; flex-direction:column; align-items:center; gap:8px; margin-bottom:16px;}
+.login-title{text-align:center; font-weight:900; font-size:19px; color:var(--navy); margin-top:4px;}
+.login-sub{text-align:center; font-size:12px; color:var(--muted); margin-bottom:20px;}
+.field{margin-bottom:14px;}
+.field label{display:block; font-size:12.5px; font-weight:700; margin-bottom:6px; color:var(--navy);}
+.field input{width:100%; padding:12px 14px; border-radius:11px; border:1.5px solid var(--line); font-family:inherit; font-size:14px; background:#FAFAFD;}
+.field input:focus{outline:none; border-color:var(--teal);}
+
+/* ---------- Watchlist star toggle ---------- */
+.star-toggle{position:absolute; top:16px; left:16px; width:36px;height:36px; border-radius:50%; background:rgba(255,255,255,.15); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:18px; border:1px solid rgba(255,255,255,.3);}
+.star-toggle.on{background:var(--gold); color:var(--navy); border-color:var(--gold);}
+
+/* ---------- misc ---------- */
+.muted{color:var(--muted); font-size:12.5px;}
+.center{text-align:center;}
+.mt8{margin-top:8px;} .mt16{margin-top:16px;} .mt24{margin-top:24px;}
+.toast{position:fixed; bottom:100px; left:50%; transform:translateX(-50%); background:var(--navy); color:#fff; padding:12px 20px; border-radius:12px; font-size:13px; font-weight:700; z-index:100; box-shadow:var(--shadow); opacity:0; transition:opacity .25s, transform .25s; pointer-events:none;}
+.toast.show{opacity:1; transform:translateX(-50%) translateY(-6px);}
+
+.lock-banner{background:#F4F3FB; border:1px dashed var(--line); border-radius:14px; padding:16px; text-align:center; margin-bottom:14px; font-size:12.5px; color:var(--muted);}
+
+.footer-brand{text-align:center; padding:18px 16px 30px; font-size:11px; color:var(--muted);}
+.footer-brand b{color:var(--navy);}
+
+/* Admin specific */
+.admin-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+@media(max-width:700px){.admin-grid{grid-template-columns:1fr;}}
+.stat-card{background:#fff; border-radius:14px; padding:18px; border:1px solid var(--line); border-top:3px solid var(--teal);}
+.stat-card .num{font-size:28px; font-weight:900; color:var(--navy);}
+.stat-card .lbl{font-size:12px; color:var(--muted); font-weight:700;}
+table{width:100%; border-collapse:collapse; font-size:13px;}
+th,td{padding:10px; text-align:right; border-bottom:1px solid var(--line);}
+th{color:var(--muted); font-weight:700; font-size:11.5px;}
+textarea{width:100%; padding:12px; border-radius:11px; border:1.5px solid var(--line); font-family:inherit; font-size:13.5px; background:#FAFAFD; resize:vertical; min-height:70px;}
+select{width:100%; padding:12px; border-radius:11px; border:1.5px solid var(--line); font-family:inherit; font-size:14px; background:#FAFAFD;}
+
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<!-- ============ شاشة الدخول / إنشاء الحساب ============ -->
+<div id="authScreen" class="login-wrap">
+  <div class="login-card">
+    <div class="login-logo" id="authLoginLogo"></div>
+    <div class="login-title">لوحة تحكم المنظّم</div>
+    <div class="program-name">Innovation Marketplace</div>
+    <div class="login-sub" id="authSub">جاري التحقق...</div>
+
+    <div id="authLoginForm" style="display:none;">
+      <div class="field">
+        <label>اسم المستخدم</label>
+        <input id="adminUsername" type="text" autocomplete="username" placeholder="admin">
+      </div>
+      <div class="field">
+        <label>كلمة المرور</label>
+        <input id="adminPassword" type="password" autocomplete="current-password" placeholder="••••••••">
+      </div>
+      <button class="btn btn-purple btn-block" onclick="adminLogin()">دخول</button>
+    </div>
+
+    <div id="authSetupForm" style="display:none;">
+      <p class="muted center" style="margin-bottom:16px;">لا يوجد حساب منظّم بعد — أنشئ أول حساب للدخول إلى لوحة التحكم.</p>
+      <div class="field">
+        <label>اسم مستخدم جديد</label>
+        <input id="newAdminUsername" type="text" autocomplete="username" placeholder="مثال: organizer">
+      </div>
+      <div class="field">
+        <label>كلمة مرور جديدة</label>
+        <input id="newAdminPassword" type="password" autocomplete="new-password" placeholder="8 أحرف على الأقل">
+      </div>
+      <div class="field">
+        <label>تأكيد كلمة المرور</label>
+        <input id="newAdminPassword2" type="password" autocomplete="new-password" placeholder="أعد كتابة كلمة المرور">
+      </div>
+      <button class="btn btn-gold btn-block" onclick="adminSetup()">إنشاء الحساب والدخول</button>
+    </div>
+  </div>
+</div>
+
+<div class="app wide" id="adminApp" style="display:none;">
+  <div class="topbar">
+    <div class="toprow">
+      <div id="topLogo"></div>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div class="phase-pill" id="phasePill">—</div>
+        <button class="btn btn-sm btn-outline" onclick="adminLogout()">خروج</button>
+      </div>
+    </div>
+    <div style="font-size:10px; font-weight:800; letter-spacing:1.5px; color:var(--teal); text-transform:uppercase; padding-bottom:8px;">Innovation Marketplace — سوق الابتكار</div>
+  </div>
+  <div id="ticksBand"></div>
+
+  <div class="content" id="content" style="max-width:1000px; margin:0 auto; width:100%;"></div>
+  <div class="footer-brand">لوحة تحكم المنظّم — مبادرة من مبادرات <b>جامعة القصيم</b></div>
+</div>
+
+<script>
+/* ============================================================
+   Innovation Marketplace — إعدادات الاتصال بقاعدة البيانات
+   ============================================================
+   عدّل القيمتين التاليتين ببيانات مشروعك في Supabase
+   (Project Settings → API)
+   إن تُركتا فارغتين، يعمل الموقع تلقائياً في "وضع العرض التجريبي"
+   (بيانات وهمية محفوظة في الذاكرة فقط، لتجربة الموقع قبل الربط).
+   ============================================================ */
+const SUPABASE_URL = "https://oskafesmbjxjbanrmurn.supabase.co";      // مثال: https://xxxxxxxx.supabase.co
+const SUPABASE_ANON_KEY = "sb_publishable_r9f4t3k-SW6NTYEv8bS3UQ_floV4BxH";  // مفتاح anon public
+
+const DEMO_MODE = !SUPABASE_URL || !SUPABASE_ANON_KEY;
+
+/* ---------- تهيئة Supabase (عند توفر الإعدادات) ---------- */
+let supabaseClient = null;
+if (!DEMO_MODE) {
+  supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+}
+
+/* ============================================================
+   وضع العرض التجريبي — مخزن بيانات وهمي في المتصفح
+   ============================================================ */
+const DEMO_SEED_COMPANIES = [
+  { id:"c1", name:"Green Energy", sector:"الطاقة", emoji:"🌞",
+    team_members:"سارة العتيبي، فيصل القحطاني، نورة الدوسري",
+    problem:"ارتفاع فاقد الطاقة في المباني السكنية القديمة بسبب ضعف العزل والمراقبة.",
+    solution:"نظام استشعار ذكي يراقب استهلاك الطاقة لحظياً ويقترح تعديلات تلقائية لتقليل الفاقد.",
+    value_prop:"خفض فاتورة الكهرباء حتى 30% دون تدخل يدوي من المستخدم.",
+    video_url:"", booth_number:"A1" },
+  { id:"c2", name:"Med AI", sector:"الصحة", emoji:"🩺",
+    team_members:"عبدالله المطيري، ريم الشمري",
+    problem:"تأخر تشخيص أمراض الشبكية لدى مرضى السكري في المناطق النائية.",
+    solution:"نموذج ذكاء اصطناعي يحلل صور قاع العين ويصدر تقرير أولي خلال ثوانٍ.",
+    value_prop:"تقليل زمن الكشف المبكر من أسابيع إلى دقائق بدقة تفوق 90%.",
+    video_url:"", booth_number:"A2" },
+  { id:"c3", name:"Smart Farm", sector:"الزراعة", emoji:"🌱",
+    team_members:"خالد الحربي، منى العنزي، تركي الرشيدي",
+    problem:"هدر كبير في مياه الري بالمزارع الصغيرة بسبب الجدولة اليدوية.",
+    solution:"وحدة ري ذكية تعتمد على رطوبة التربة الفعلية وتوقعات الطقس.",
+    value_prop:"توفير يصل إلى 40% من استهلاك المياه في الموسم الواحد.",
+    video_url:"", booth_number:"B1" },
+  { id:"c4", name:"EduPath", sector:"التعليم", emoji:"🎓",
+    team_members:"لمى الغامدي، ياسر السبيعي",
+    problem:"صعوبة تحديد المسار التعليمي المناسب لكل طالب حسب قدراته الفعلية.",
+    solution:"منصة تقيّم مهارات الطالب وتبني له خطة تعلم تكيفية أسبوعية.",
+    value_prop:"رفع نسبة إكمال المسارات التعليمية بنسبة 25%.",
+    video_url:"", booth_number:"B2" },
+  { id:"c5", name:"LogiTrack", sector:"اللوجستيات", emoji:"📦",
+    team_members:"بندر العصيمي، هند الزهراني",
+    problem:"ضعف تتبع الشحنات الداخلية بين فروع الشركات الصغيرة.",
+    solution:"نظام تتبع لحظي بالباركود يعمل بدون اتصال إنترنت دائم.",
+    value_prop:"تقليل الشحنات المفقودة أو المتأخرة بنسبة 50%.",
+    video_url:"", booth_number:"C1" }
+];
+
+function loadDemoStore(){
+  const raw = window.__IM_DEMO_STORE__;
+  if (raw) return raw;
+  const store = {
+    event_state: { phase: "explore", investor_budget: 5000 },
+    companies: JSON.parse(JSON.stringify(DEMO_SEED_COMPANIES)),
+    investors: [
+      { id: 'demo-inv-1', name: 'مستثمر تجريبي 1', username: 'demo-inv-1', pin: null, evaluation_done: false },
+      { id: 'demo-inv-2', name: 'مستثمر تجريبي 2', username: 'demo-inv-2', pin: null, evaluation_done: false }
+    ],
+    visits: [],
+    watchlist: [],
+    evaluations: []
+  };
+  window.__IM_DEMO_STORE__ = store;
+  return store;
+}
+const demoStore = DEMO_MODE ? loadDemoStore() : null;
+
+function uid(){ return 'id-' + Math.random().toString(36).slice(2,10); }
+
+/* ============================================================
+   طبقة بيانات موحّدة — تعمل فوق Supabase أو وضع العرض التجريبي
+   ============================================================ */
+const DB = {
+  async getPhase(){
+    if (DEMO_MODE) return demoStore.event_state.phase;
+    const { data, error } = await supabaseClient.from('event_state').select('phase').eq('id',1).single();
+    if (error) throw error;
+    return data?.phase || 'explore';
+  },
+  async setPhase(phase){
+    if (DEMO_MODE){ demoStore.event_state.phase = phase; return; }
+    const { error } = await supabaseClient.from('event_state').update({ phase, updated_at: new Date().toISOString() }).eq('id',1);
+    if (error) throw error;
+  },
+  async getBudget(){
+    if (DEMO_MODE) return demoStore.event_state.investor_budget ?? 5000;
+    const { data, error } = await supabaseClient.from('event_state').select('investor_budget').eq('id',1).single();
+    if (error) throw error;
+    return data?.investor_budget ?? 5000;
+  },
+  async setBudget(amount){
+    amount = Math.max(0, parseInt(amount) || 0);
+    if (DEMO_MODE){ demoStore.event_state.investor_budget = amount; return; }
+    const { error } = await supabaseClient.from('event_state').update({ investor_budget: amount, updated_at: new Date().toISOString() }).eq('id',1);
+    if (error) throw error;
+  },
+  onPhaseChange(cb){
+    let lastPhase = null;
+    const maybeNotify = (p)=>{ if (p !== lastPhase){ lastPhase = p; cb(p); } };
+    if (DEMO_MODE){ setInterval(()=>maybeNotify(demoStore.event_state.phase), 1500); return; }
+    supabaseClient.channel('event_state_ch')
+      .on('postgres_changes', { event:'UPDATE', schema:'public', table:'event_state' }, payload=>{
+        maybeNotify(payload.new.phase);
+      }).subscribe();
+    setInterval(async ()=>{ try{ maybeNotify(await DB.getPhase()); }catch(err){ /* يُعاد المحاولة في الدورة التالية */ } }, 4000);
+  },
+
+  async getCompanies(){
+    if (DEMO_MODE) return demoStore.companies;
+    const { data, error } = await supabaseClient.from('companies')
+      .select('id,name,sector,emoji,team_members,problem,solution,value_prop,video_url,booth_number,created_at')
+      .order('created_at');
+    if (error) throw error;
+    return data || [];
+  },
+  async addCompany(c){
+    if (DEMO_MODE){ c.id = uid(); demoStore.companies.push(c); return c; }
+    const { data, error } = await supabaseClient.from('companies').insert(c)
+      .select('id,name,sector,emoji,team_members,problem,solution,value_prop,video_url,booth_number,created_at')
+      .single();
+    if (error) throw error;
+    return data;
+  },
+  async deleteCompany(id){
+    if (DEMO_MODE){ demoStore.companies = demoStore.companies.filter(c=>c.id!==id); return; }
+    const { error } = await supabaseClient.from('companies').delete().eq('id', id);
+    if (error) throw error;
+  },
+
+  async createInvestor(name, username, password){
+    username = String(username).trim().toLowerCase();
+    if (DEMO_MODE){
+      if (demoStore.investors.find(i=>i.username===username)) throw new Error('اسم المستخدم مستخدم مسبقاً');
+      const inv = { id: uid(), name, username, pin: null };
+      demoStore.investors.push(inv);
+      return { id: inv.id, name: inv.name, username: inv.username };
+    }
+    const { data, error } = await supabaseClient.rpc('create_investor', { p_name: name, p_username: username, p_password: '' });
+    if (error) throw error;
+    return data && data[0];
+  },
+  async verifyInvestor(username, password){
+    username = String(username).trim().toLowerCase();
+    password = String(password).trim();
+    if (DEMO_MODE){
+      const inv = demoStore.investors.find(i=>i.username===username && i.password===password);
+      return inv ? { id: inv.id, name: inv.name } : null;
+    }
+    const { data, error } = await supabaseClient.rpc('verify_investor', { p_username: username, p_password: password });
+    if (error) throw error;
+    return (data && data[0]) || null;
+  },
+  async adminCount(){
+    if (DEMO_MODE) return demoStore.admins ? demoStore.admins.length : 0;
+    const { data, error } = await supabaseClient.rpc('admin_count');
+    if (error) throw error;
+    return data || 0;
+  },
+  async createAdmin(username, password){
+    username = String(username).trim().toLowerCase();
+    password = String(password).trim();
+    if (DEMO_MODE){
+      demoStore.admins = demoStore.admins || [];
+      if (demoStore.admins.find(a=>a.username===username)) throw new Error('اسم المستخدم مستخدم مسبقاً');
+      demoStore.admins.push({ id: uid(), username, password });
+      return { username };
+    }
+    const { data, error } = await supabaseClient.rpc('create_admin', { p_username: username, p_password: password });
+    if (error) throw error;
+    return data && data[0];
+  },
+  async verifyAdmin(username, password){
+    username = String(username).trim().toLowerCase();
+    password = String(password).trim();
+    if (DEMO_MODE){
+      demoStore.admins = demoStore.admins || [];
+      const a = demoStore.admins.find(a=>a.username===username && a.password===password);
+      return a ? { id: a.id, username: a.username } : null;
+    }
+    const { data, error } = await supabaseClient.rpc('verify_admin', { p_username: username, p_password: password });
+    if (error) throw error;
+    return (data && data[0]) || null;
+  },
+
+  async addVisit(investor_id, company_id){
+    if (DEMO_MODE){
+      if (!demoStore.visits.find(v=>v.investor_id===investor_id && v.company_id===company_id))
+        demoStore.visits.push({ id:uid(), investor_id, company_id, visited_at:new Date().toISOString(), notes:null });
+      return;
+    }
+    const { error } = await supabaseClient.from('visits').upsert({ investor_id, company_id }, { onConflict:'investor_id,company_id' });
+    if (error) throw error;
+  },
+  async setVisitNotes(investor_id, company_id, notes){
+    notes = (notes||'').trim() || null;
+    if (DEMO_MODE){
+      const v = demoStore.visits.find(v=>v.investor_id===investor_id && v.company_id===company_id);
+      if (v) v.notes = notes;
+      return;
+    }
+    const { error } = await supabaseClient.from('visits').update({ notes }).match({ investor_id, company_id });
+    if (error) throw error;
+  },
+  async getVisits(investor_id){
+    if (DEMO_MODE) return demoStore.visits.filter(v=>v.investor_id===investor_id);
+    const { data, error } = await supabaseClient.from('visits').select('*').eq('investor_id', investor_id);
+    if (error) throw error;
+    return data || [];
+  },
+  async getAllVisits(){
+    if (DEMO_MODE) return demoStore.visits;
+    const { data, error } = await supabaseClient.from('visits').select('*');
+    if (error) throw error;
+    return data || [];
+  },
+
+  async toggleWatch(investor_id, company_id, on){
+    if (DEMO_MODE){
+      demoStore.watchlist = demoStore.watchlist.filter(w=>!(w.investor_id===investor_id && w.company_id===company_id));
+      if (on) demoStore.watchlist.push({ id:uid(), investor_id, company_id });
+      return;
+    }
+    if (on){
+      const { error } = await supabaseClient.from('watchlist').upsert({ investor_id, company_id }, { onConflict:'investor_id,company_id' });
+      if (error) throw error;
+    }else{
+      const { error } = await supabaseClient.from('watchlist').delete().match({ investor_id, company_id });
+      if (error) throw error;
+    }
+  },
+  async getWatchlist(investor_id){
+    if (DEMO_MODE) return demoStore.watchlist.filter(w=>w.investor_id===investor_id);
+    const { data, error } = await supabaseClient.from('watchlist').select('*').eq('investor_id', investor_id);
+    if (error) throw error;
+    return data || [];
+  },
+
+  async submitEvaluation(ev){
+    if (DEMO_MODE){
+      demoStore.evaluations = demoStore.evaluations.filter(e=>!(e.investor_id===ev.investor_id && e.company_id===ev.company_id));
+      demoStore.evaluations.push({ id:uid(), ...ev, submitted_at:new Date().toISOString() });
+      return;
+    }
+    const { error } = await supabaseClient.from('evaluations').upsert(ev, { onConflict:'investor_id,company_id' });
+    if (error) throw error;
+  },
+  async getEvaluations(investor_id){
+    if (DEMO_MODE) return demoStore.evaluations.filter(e=>e.investor_id===investor_id);
+    const { data, error } = await supabaseClient.from('evaluations').select('*').eq('investor_id', investor_id);
+    if (error) throw error;
+    return data || [];
+  },
+  async getAllEvaluations(){
+    if (DEMO_MODE) return demoStore.evaluations;
+    const { data, error } = await supabaseClient.from('evaluations').select('*');
+    if (error) throw error;
+    return data || [];
+  },
+  async markEvaluationDone(investor_id){
+    if (DEMO_MODE){
+      const inv = demoStore.investors.find(i=>i.id===investor_id);
+      if (inv) inv.evaluation_done = true;
+      return;
+    }
+    const { error } = await supabaseClient.rpc('mark_evaluation_done', { p_investor_id: investor_id });
+    if (error) throw error;
+  },
+
+  async getAllInvestors(){
+    if (DEMO_MODE) return demoStore.investors;
+    const { data, error } = await supabaseClient.from('investors').select('id,name,username,evaluation_done,created_at');
+    if (error) throw error;
+    return data || [];
+  },
+
+  /* دخول المستثمر بالاسم + رمز بسيط (PIN):
+     أول مرة يُدخل فيها اسم جديد، يُنشأ حساب تلقائياً بنفس الرمز.
+     أي دخول لاحق بنفس الاسم يتطلب نفس الرمز — يمنع انتحال شخص لاسم غيره. */
+  async investorLogin(name, pin){
+    name = String(name).trim();
+    pin = String(pin).trim();
+    if (!name) throw new Error('الرجاء إدخال الاسم');
+    if (!pin) throw new Error('الرجاء إدخال الرمز');
+    if (DEMO_MODE){
+      const existing = demoStore.investors.find(i => i.name.trim().toLowerCase() === name.toLowerCase());
+      if (!existing) throw new Error('هذا الاسم غير مسجّل. تواصل مع منظّم الفعالية لإضافتك.');
+      if (existing.pin == null){
+        existing.pin = pin;
+        return { id: existing.id, name: existing.name };
+      }
+      if (existing.pin !== pin) throw new Error('الرمز غير صحيح لهذا الاسم');
+      return { id: existing.id, name: existing.name };
+    }
+    const { data, error } = await supabaseClient.rpc('investor_login_or_register', { p_name: name, p_pin: pin });
+    if (error) throw error;
+    return data && data[0];
+  },
+
+  /* وضع الدخول المفتوح القديم (بدون أي رمز) — أُبقي عليه كمرجع احتياطي غير مستخدم حالياً. */
+  async findOrCreateInvestorByName(name){
+    name = String(name).trim();
+    if (!name) throw new Error('الرجاء إدخال الاسم');
+    const all = await this.getAllInvestors();
+    const existing = all.find(i => i.name.trim().toLowerCase() === name.toLowerCase());
+    if (existing) return { id: existing.id, name: existing.name };
+    const username = 'guest-' + Math.random().toString(36).slice(2,8);
+    const password = Math.random().toString(36).slice(2,10);
+    const created = await this.createInvestor(name, username, password);
+    return { id: created.id, name };
+  }
+};
+
+function toast(msg){
+  let t = document.querySelector('.toast');
+  if (!t){ t = document.createElement('div'); t.className='toast'; document.body.appendChild(t); }
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+/* ============================================================
+   عناصر الهوية البصرية المشتركة — مستوحاة من نشرة حاضنة ابتكار 5
+   ============================================================ */
+const BRAND_COLORS = ['#9A05B9','#FCC342','#00BF9D','#63D653'];
+function ticksHTML(count){
+  count = count || 26;
+  let out = '';
+  for (let i=0;i<count;i++){
+    const color = BRAND_COLORS[i % BRAND_COLORS.length];
+    const h = 8 + ((i*7)%3===0 ? 14 : (i*5)%2===0 ? 9 : 5);
+    out += `<span style="height:${h}px;background:${color}"></span>`;
+  }
+  return `<div class="brand-ticks">${out}</div>`;
+}
+function logoLockup(dark){
+  const cls = dark ? 'logo-lockup on-dark' : 'logo-lockup';
+  const boxCls = dark ? 'logo-num-box on-dark' : 'logo-num-box';
+  return `
+    <div class="${cls}">
+      <div class="${boxCls}">5</div>
+      <div class="logo-text">
+        <b>حاضنة ابتكار</b>
+        <span class="en">Innovation Incubator</span>
+      </div>
+    </div>`;
+}
+function phaseColor(p){
+  return p==='explore' ? getComputedCssVar('--phase-explore')
+       : p==='evaluation' ? getComputedCssVar('--phase-evaluation')
+       : getComputedCssVar('--phase-results');
+}
+function getComputedCssVar(name){
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
+/* ============================================================
+   توليد بيانات دخول (لإضافة المستثمرين دفعة واحدة من لوحة التحكم)
+   ============================================================ */
+function genUsername(seq){
+  return 'INV-' + String(seq).padStart(3,'0');
+}
+function genPassword(){
+  return String(Math.floor(100000 + Math.random()*900000)); // رمز رقمي من 6 خانات
+}
+
+document.getElementById('authLoginLogo').innerHTML = logoLockup(false);
+['adminPassword'].forEach(id=>{
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('keydown', e=>{ if(e.key==='Enter') adminLogin(); });
+});
+['newAdminPassword2'].forEach(id=>{
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('keydown', e=>{ if(e.key==='Enter') adminSetup(); });
+});
+
+/* ============================================================
+   بوابة الدخول — تُنشئ أول حساب منظّم إن لم يوجد، وإلا تطلب الدخول
+   ============================================================ */
+(async function initAuth(){
+  try{
+    const count = await DB.adminCount();
+    document.getElementById('authSub').textContent = count === 0
+      ? 'إعداد أول تشغيل للوحة التحكم'
+      : 'الدخول إلى لوحة تحكم المنظّم';
+    document.getElementById(count === 0 ? 'authSetupForm' : 'authLoginForm').style.display = 'block';
+  }catch(err){
+    document.getElementById('authSub').textContent = 'تعذّر الاتصال بقاعدة البيانات — تحقق من إعدادات config.js';
+  }
+})();
+
+async function adminSetup(){
+  const u = document.getElementById('newAdminUsername').value.trim();
+  const p1 = document.getElementById('newAdminPassword').value;
+  const p2 = document.getElementById('newAdminPassword2').value;
+  if (!u || !p1){ toast('الرجاء تعبئة جميع الحقول'); return; }
+  if (p1.length < 8){ toast('كلمة المرور يجب أن تكون 8 أحرف على الأقل'); return; }
+  if (p1 !== p2){ toast('كلمتا المرور غير متطابقتين'); return; }
+  try{
+    await DB.createAdmin(u, p1);
+    toast('تم إنشاء الحساب بنجاح ✅');
+    enterAdminApp();
+  }catch(err){
+    toast('تعذّر إنشاء الحساب — قد يكون اسم المستخدم مستخدماً بالفعل');
+  }
+}
+async function adminLogin(){
+  const u = document.getElementById('adminUsername').value.trim();
+  const p = document.getElementById('adminPassword').value;
+  if (!u || !p){ toast('الرجاء إدخال اسم المستخدم وكلمة المرور'); return; }
+  try{
+    const acc = await DB.verifyAdmin(u, p);
+    if (!acc){ toast('اسم المستخدم أو كلمة المرور غير صحيحة'); return; }
+    enterAdminApp();
+  }catch(err){
+    toast('تعذّر الاتصال، حاول مرة أخرى');
+  }
+}
+function enterAdminApp(){
+  document.getElementById('authScreen').style.display = 'none';
+  document.getElementById('adminApp').style.display = 'flex';
+  boot();
+}
+function adminLogout(){
+  document.getElementById('adminApp').style.display = 'none';
+  document.getElementById('authScreen').style.display = 'flex';
+  document.getElementById('authSetupForm').style.display = 'none';
+  document.getElementById('authLoginForm').style.display = 'block';
+  document.getElementById('authSub').textContent = 'الدخول إلى لوحة تحكم المنظّم';
+  const au = document.getElementById('adminUsername'); if (au) au.value = '';
+  const ap = document.getElementById('adminPassword'); if (ap) ap.value = '';
+}
+
+document.getElementById('topLogo').innerHTML = logoLockup(false);
+document.getElementById('ticksBand').innerHTML = ticksHTML(60);
+
+let COMPANIES = [], PHASE='explore', BUDGET=1000, VISITS=[], EVALS=[], INVESTORS=[];
+
+function isUserTypingInForm(){
+  const active = document.activeElement;
+  const contentEl = document.getElementById('content');
+  return !!(active && (active.tagName==='INPUT' || active.tagName==='TEXTAREA') && contentEl && contentEl.contains(active));
+}
+function safeRender(){ if (!isUserTypingInForm()) render(); }
+
+async function boot(){
+  try{
+    await refresh();
+    render();
+    DB.onPhaseChange(async p=>{ PHASE=p; document.getElementById('phasePill').textContent = phaseLabel(p); document.getElementById('phasePill').style.background = phaseColor(p); safeRender(); });
+    setInterval(refresh, 6000);
+    setInterval(safeRender, 6000);
+  }catch(err){
+    console.error('boot() failed:', err);
+    document.getElementById('content').innerHTML = `
+      <div class="lock-banner" style="border-color:var(--danger); text-align:right;">
+        <b style="color:var(--danger);">⚠️ تعذّر تحميل البيانات من قاعدة البيانات${err.__step ? ' (فشل عند: '+err.__step+')' : ''}</b><br>
+        <span style="font-family:monospace; font-size:12px; word-break:break-all;">${(err && (err.message||err.details||err.hint)) || JSON.stringify(err)}</span><br>
+        <span class="muted">أرسل هذه الرسالة كاملة للدعم الفني لتشخيص المشكلة بدقة.</span>
+      </div>
+    `;
+  }
+}
+async function refresh(){
+  const step = async (label, fn) => {
+    try{ return await fn(); }
+    catch(err){ err.__step = label; throw err; }
+  };
+  COMPANIES = await step('companies', ()=>DB.getCompanies());
+  PHASE = await step('phase', ()=>DB.getPhase());
+  BUDGET = await step('budget', ()=>DB.getBudget());
+  VISITS = await step('visits', ()=>DB.getAllVisits());
+  EVALS = await step('evaluations', ()=>DB.getAllEvaluations());
+  INVESTORS = await step('investors', ()=>DB.getAllInvestors());
+  document.getElementById('phasePill').textContent = phaseLabel(PHASE);
+  document.getElementById('phasePill').style.background = phaseColor(PHASE);
+}
+function phaseLabel(p){ return p==='explore'?'الاستكشاف':p==='evaluation'?'التقييم':'النتائج'; }
+
+function render(){
+  const c = document.getElementById('content');
+  const visitCountByCompany = {};
+  VISITS.forEach(v=>visitCountByCompany[v.company_id]=(visitCountByCompany[v.company_id]||0)+1);
+  const evalCountByCompany = {};
+  EVALS.forEach(e=>evalCountByCompany[e.company_id]=(evalCountByCompany[e.company_id]||0)+1);
+  const totalInvestors = INVESTORS.length || 1;
+  const finishedCount = INVESTORS.filter(i=>i.evaluation_done).length;
+  const pct = Math.min(100, Math.round((finishedCount/totalInvestors)*100));
+
+  c.innerHTML = `
+    ${DEMO_MODE ? `<div class="lock-banner">⚠️ الوضع الحالي: <b>عرض تجريبي</b> (بيانات محفوظة مؤقتاً في المتصفح). أضف بيانات Supabase في ملف config.js لتفعيل المشاركة الحقيقية متعددة الأجهزة.</div>` : ''}
+
+    <div class="section-title">التحكم بمراحل الفعالية</div>
+    <div class="card" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">
+      <button class="btn ${PHASE==='explore'?'btn-teal':'btn-outline'}" style="${PHASE==='explore'?'background:var(--green);color:#153a12;':''}" onclick="changePhase('explore')">🧭 فتح الاستكشاف</button>
+      <button class="btn ${PHASE==='evaluation'?'btn-purple':'btn-outline'}" onclick="changePhase('evaluation')">📝 فتح التقييم</button>
+      <button class="btn ${PHASE==='results'?'btn-teal':'btn-outline'}" onclick="changePhase('results')">🏆 إعلان النتائج</button>
+    </div>
+
+    <div class="section-title">الميزانية الاستثمارية لكل مستثمر</div>
+    <div class="card" style="display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap; margin-bottom:20px;">
+      <div class="field" style="margin-bottom:0; min-width:160px;">
+        <label>المبلغ لكل مستثمر</label>
+        <input id="f_budget" type="number" min="0" step="10" value="${BUDGET}">
+      </div>
+      <button class="btn btn-gold" onclick="saveBudget()">💾 حفظ الميزانية</button>
+      <p class="muted" style="width:100%; margin:4px 0 0;">هذا المبلغ يُوزَّع بحرية من كل مستثمر بين الشركات أثناء مرحلة التقييم؛ خيارات الاستثمار المعروضة له تُحسب تلقائياً كنسب من هذا المبلغ.</p>
+    </div>
+
+    <div class="admin-grid mt16">
+      <div class="stat-card"><div class="num">${COMPANIES.length}</div><div class="lbl">عدد الشركات</div></div>
+      <div class="stat-card"><div class="num">${INVESTORS.length}</div><div class="lbl">عدد المستثمرين المسجّلين</div></div>
+      <div class="stat-card"><div class="num">${VISITS.length}</div><div class="lbl">إجمالي الزيارات المؤكدة</div></div>
+      <div class="stat-card">
+        <div class="num">${pct}%</div><div class="lbl">أنهوا التقييم (${finishedCount}/${totalInvestors})</div>
+        <div class="progress-bar mt8"><div style="width:${pct}%"></div></div>
+      </div>
+    </div>
+
+    <div class="section-title mt24">الشركات المشاركة</div>
+    <div class="lock-banner" style="text-align:right; margin-bottom:14px;">
+      💡 فرق الشركات يقدرون يسجّلون أو يعدّلون بيانات شركاتهم بأنفسهم (بدون حاجة لك) من صفحة
+      <a href="register.html" target="_blank" style="color:var(--teal-dark); font-weight:800;">register.html</a> —
+      شارك هذا الرابط معهم مباشرة.
+    </div>
+    <div class="card" style="margin-bottom:16px;">
+      <table>
+        <thead><tr><th>الشركة</th><th>القطاع</th><th>الجناح</th><th>زيارات</th><th>تقييمات</th><th></th><th></th></tr></thead>
+        <tbody>
+        ${COMPANIES.map(co=>`
+          <tr>
+            <td>${co.emoji||'🚀'} ${co.name}</td>
+            <td>${co.sector||'—'}</td>
+            <td>${co.booth_number||'—'}</td>
+            <td>${visitCountByCompany[co.id]||0}</td>
+            <td>${evalCountByCompany[co.id]||0}</td>
+            <td><a class="btn btn-sm btn-teal" href="company.html?id=${co.id}" target="_blank" style="text-decoration:none;">📊 صفحة الشركة</a></td>
+            <td><button class="btn btn-sm btn-outline" onclick="removeCompany('${co.id}')">حذف</button></td>
+          </tr>
+        `).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title">إضافة شركة جديدة</div>
+    <div class="card" style="margin-bottom:20px;">
+      <div class="admin-grid">
+        <div class="field"><label>اسم الشركة</label><input id="f_name" type="text"></div>
+        <div class="field"><label>القطاع</label><input id="f_sector" type="text" placeholder="مثال: الصحة"></div>
+        <div class="field"><label>رمز تعبيري (Emoji)</label><input id="f_emoji" type="text" placeholder="🚀" value="🚀"></div>
+        <div class="field"><label>رقم الجناح</label><input id="f_booth" type="text" placeholder="A1"></div>
+      </div>
+      <div class="field"><label>أعضاء الفريق</label><input id="f_team" type="text"></div>
+      <div class="field"><label>المشكلة</label><textarea id="f_problem"></textarea></div>
+      <div class="field"><label>الحل</label><textarea id="f_solution"></textarea></div>
+      <div class="field"><label>القيمة المقترحة</label><textarea id="f_value"></textarea></div>
+      <div class="field"><label>رابط فيديو (اختياري)</label><input id="f_video" type="text"></div>
+      <button class="btn btn-gold" onclick="addCompanyFromForm()">➕ إضافة الشركة</button>
+    </div>
+
+    <div class="section-title mt24">إدارة المستثمرين</div>
+    <div class="card" style="margin-bottom:16px;">
+      <p class="muted" style="margin-bottom:10px;">الصق أسماء المشاركين (اسم واحد بكل سطر). بمجرد إضافتهم، تظهر أسماؤهم فوراً في صفحة المستثمر ليختاروا اسمهم ويدخلوا مباشرة — بدون أي كلمة مرور.</p>
+      <textarea id="bulkNames" placeholder="عبدالله الحربي&#10;سارة العتيبي&#10;فيصل القحطاني" style="min-height:100px;"></textarea>
+      <button class="btn btn-purple mt8" onclick="bulkCreateInvestors()">➕ إضافة المشاركين</button>
+    </div>
+
+    <div class="section-title">المستثمرون المسجّلون (${INVESTORS.length})</div>
+    <div class="card" style="margin-bottom:16px; max-height:280px; overflow:auto;">
+      <table>
+        <thead><tr><th>الاسم</th><th>حالة التقييم</th></tr></thead>
+        <tbody>
+        ${INVESTORS.length ? INVESTORS.map(i=>`<tr><td>${i.name}</td><td>${i.evaluation_done ? '<span class="badge visited">✓ أنهى</span>' : '<span class="badge watch">لم ينهِ بعد</span>'}</td></tr>`).join('') : '<tr><td colspan="2" class="muted">لا يوجد مستثمرون مسجّلون بعد</td></tr>'}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title mt24">تقرير الشركات</div>
+    <div class="lock-banner" style="text-align:right; margin-bottom:14px;">
+      <b>كيف تُحسب "القيمة التقديرية"؟</b><br>
+      <span style="line-height:1.9;">
+        القيمة = (مجموع نقاط التقييم من كل مستثمر عبر المعايير الخمسة الابتكار، حجم السوق، الفريق، إمكانية التنفيذ، القابلية للاستثمار كل معيار من 1 إلى 5 × <b>40</b>)
+        + (إجمالي مبلغ الاستثمار المُصرَّح به من كل المستثمرين × <b>10</b>)<br>
+        مثال: شركة حصلت على مجموع تقييمات 92 نقطة وإجمالي استثمار 800 →
+        القيمة = (92×40) + (800×10) = <b>11,680</b><br>
+        <span class="muted">يمكن تعديل هذه المعادلة من دالة <code>computeRanking()</code> في <code>index.html</code> و<code>screen.html</code>، ودالة <code>companyReport()</code> في هذه اللوحة، إن رغبتم بوزن مختلف للمعايير.</span>
+      </span>
+    </div>
+    <div class="card" style="margin-bottom:16px; overflow-x:auto;">
+      <table>
+        <thead><tr><th>الشركة</th><th>زيارات</th><th>مستثمرون</th><th>إجمالي الاستثمار</th><th>متوسط التقييم</th><th>القيمة التقديرية</th></tr></thead>
+        <tbody>
+        ${companyReport().map((r,i)=>`
+          <tr>
+            <td>${i===0 && r.evalCount>0 ? '🥇 ' : ''}${r.company.emoji||'🚀'} ${r.company.name}</td>
+            <td>${r.visitCount}</td>
+            <td>${r.evalCount}</td>
+            <td style="font-weight:800; color:var(--purple);">${r.totalInvested.toLocaleString()}</td>
+            <td>${r.evalCount ? r.avgRating.toFixed(1)+' / 5' : '—'}</td>
+            <td style="font-weight:800; color:var(--teal-dark);">SAR ${r.valuation.toLocaleString()}</td>
+          </tr>
+        `).join('')}
+        </tbody>
+      </table>
+      <button class="btn btn-gold btn-sm mt16" onclick="exportCompanyReportCSV()">⬇️ تصدير تقرير الشركات (CSV)</button>
+    </div>
+
+    <div class="section-title">النتائج والتصدير</div>
+    <div class="card">
+      <p class="muted">تصدير جميع بيانات التقييم كملف CSV لأرشفتها أو تحليلها في إكسل.</p>
+      <button class="btn btn-teal mt8" onclick="exportCSV()">⬇️ تصدير النتائج (CSV)</button>
+    </div>
+  `;
+}
+
+function companyReport(){
+  const rows = COMPANIES.map(co=>{
+    const coVisits = VISITS.filter(v=>v.company_id===co.id);
+    const coEvals = EVALS.filter(e=>e.company_id===co.id);
+    const totalInvested = coEvals.reduce((s,e)=>s+e.investment_amount,0);
+    const avgRating = coEvals.length
+      ? coEvals.reduce((s,e)=>s + (e.innovation+e.market_size+e.team+e.feasibility+e.investability)/5, 0) / coEvals.length
+      : 0;
+    const score = coEvals.reduce((s,e)=>s + e.innovation+e.market_size+e.team+e.feasibility+e.investability, 0);
+    const valuation = Math.round(score*40 + totalInvested*10);
+    return { company: co, visitCount: coVisits.length, evalCount: coEvals.length, totalInvested, avgRating, valuation };
+  });
+  rows.sort((a,b)=>b.valuation-a.valuation);
+  return rows;
+}
+
+function exportCompanyReportCSV(){
+  const rows = [['الشركة','القطاع','زيارات','مستثمرون','إجمالي الاستثمار','متوسط التقييم','القيمة التقديرية']];
+  companyReport().forEach(r=>{
+    rows.push([r.company.name, r.company.sector||'', r.visitCount, r.evalCount, r.totalInvested, r.evalCount?r.avgRating.toFixed(2):'', r.valuation]);
+  });
+  const csv = rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob(["\uFEFF"+csv], { type:'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'companies-report.csv';
+  a.click();
+}
+
+async function bulkCreateInvestors(){
+  const raw = document.getElementById('bulkNames').value;
+  const names = raw.split('\n').map(n=>n.trim()).filter(Boolean);
+  if (!names.length){ toast('الرجاء إدخال اسم واحد على الأقل'); return; }
+
+  const existingUsernames = new Set(INVESTORS.map(i=>i.username));
+  let seq = INVESTORS.length + 1;
+  let successCount = 0;
+  for (const name of names){
+    let username;
+    do { username = genUsername(seq++); } while (existingUsernames.has(username));
+    existingUsernames.add(username);
+    const password = genPassword(); // داخلي فقط، غير مستخدم لتسجيل الدخول
+    try{
+      await DB.createInvestor(name, username, password);
+      successCount++;
+    }catch(err){ /* تجاهل التكرارات */ }
+  }
+
+  document.getElementById('bulkNames').value = '';
+  await refresh();
+  render();
+  toast(`تمت إضافة ${successCount} مشارك ✅`);
+}
+
+async function saveBudget(){
+  const val = document.getElementById('f_budget').value;
+  await DB.setBudget(val);
+  BUDGET = parseInt(val) || 0;
+  toast('تم حفظ الميزانية ✅');
+}
+
+async function changePhase(p){
+  await DB.setPhase(p);
+  PHASE = p;
+  toast('تم تفعيل: ' + phaseLabel(p));
+  await refresh(); render();
+}
+
+async function addCompanyFromForm(){
+  const name = document.getElementById('f_name').value.trim();
+  if (!name){ toast('الرجاء إدخال اسم الشركة'); return; }
+  await DB.addCompany({
+    name,
+    sector: document.getElementById('f_sector').value.trim(),
+    emoji: document.getElementById('f_emoji').value.trim() || '🚀',
+    booth_number: document.getElementById('f_booth').value.trim(),
+    team_members: document.getElementById('f_team').value.trim(),
+    problem: document.getElementById('f_problem').value.trim(),
+    solution: document.getElementById('f_solution').value.trim(),
+    value_prop: document.getElementById('f_value').value.trim(),
+    video_url: document.getElementById('f_video').value.trim()
+  });
+  toast('تمت إضافة الشركة ✅');
+  await refresh(); render();
+}
+async function removeCompany(id){
+  if (!confirm('حذف هذه الشركة نهائياً؟')) return;
+  await DB.deleteCompany(id);
+  await refresh(); render();
+}
+
+function exportCSV(){
+  const investorMap = {}; INVESTORS.forEach(i=>investorMap[i.id]=i.name);
+  const companyMap = {}; COMPANIES.forEach(c=>companyMap[c.id]=c.name);
+  let rows = [['المستثمر','الشركة','الابتكار','حجم السوق','الفريق','إمكانية التنفيذ','القابلية للاستثمار','مبلغ الاستثمار','ملاحظات']];
+  EVALS.forEach(e=>{
+    rows.push([
+      investorMap[e.investor_id]||e.investor_id,
+      companyMap[e.company_id]||e.company_id,
+      e.innovation, e.market_size, e.team, e.feasibility, e.investability, e.investment_amount, e.notes||''
+    ]);
+  });
+  const csv = rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob(["\uFEFF"+csv], { type:'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'innovation-marketplace-results.csv';
+  a.click();
+}
+</script>
+</body>
+</html>
